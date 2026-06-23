@@ -7,6 +7,11 @@ const sequelize = require('./database/connection'); // llama a la conexión de l
 const app = express(); // crea una instancia de express
 const PORT = process.env.PORT || 3000; // define el puerto en el que se ejecutará el servidor, si no se define en el archivo .env, se usará el puerto 3000 por defecto
 
+const User = require('./models/user.models'); // llama al modelo de usuario
+const Cliente = require('./models/cliente.models');
+const Articulo = require('./models/articulo.models'); // llama al modelo de articulo
+
+
 sequelize.sync(
     { force: false }
 ).then(() => {
