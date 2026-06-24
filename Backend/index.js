@@ -1,17 +1,30 @@
-require('dotenv').config(); // llama a dotenv para que lea el archivo .env y cargue las variables de entorno
+require('dotenv').config(); 
+const express = require('express'); 
+const morgan = require('morgan');
 
-const express = require('express'); // llama a express para crear el servidor
-const morgan = require('morgan');// llama a morgan para registrar las solicitudes HTTP en la consola
+const sequelize = require('./database/connection'); 
+const app = express(); 
+const PORT = process.env.PORT || 3000; 
 
-const sequelize = require('./database/connection'); // llama a la conexión de la base de datos
-const app = express(); // crea una instancia de express
-const PORT = process.env.PORT || 3000; // define el puerto en el que se ejecutará el servidor, si no se define en el archivo .env, se usará el puerto 3000 por defecto
-
-const User = require('./models/user.models'); // llama al modelo de usuario
+// Importamos todos los modelos
+const User = require('./models/user.models'); 
 const Cliente = require('./models/cliente.models');
-const Articulo = require('./models/articulo.models'); // llama al modelo de articulo
+const Articulo = require('./models/articulo.models'); 
+const Venta = require('./models/venta.models'); 
+const VentaArticulo = require("./models/VentaArticulo.models");
 
+// definimos las relaciones entre los modelos
 
+Cliente.hasMany(Venta, { foreignKey: 'clienteId' });
+Venta.belongsTo(Cliente, { foreignKey: 'clienteId' });
+
+Venta.hasMany(VentaArticulo, { foreignKey: 'ventaId' });
+VentaArticulo.belongsTo(Venta, { foreignKey: 'ventaId' });
+
+Articulo.hasMany(VentaArticulo, { foreignKey: 'articuloId' });
+VentaArticulo.belongsTo(Articulo, { foreignKey: 'articuloId' });
+
+// Sincronizamos los modelos con la base de datos
 sequelize.sync(
     { force: false }
 ).then(() => {
@@ -24,8 +37,6 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Define your routes here
-// Example: app.use('/api', require('./routes/api'));
 
 app.listen(PORT, () => {
     console.log(`Servidor esta corriendo en el puerto ${PORT}`);

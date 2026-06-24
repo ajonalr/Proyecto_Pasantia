@@ -1,9 +1,9 @@
 const { DataTypes } = require("sequelize"); 
-const Sequelize = require("../database/connection"); // Import the Sequelize instance from the connection file
-const bcrypt = require("bcrypt"); // 
+const Sequelize = require("../database/connection"); 
+const bcrypt = require("bcrypt"); 
 
 const User = Sequelize.define("user", {
-  // --- AQUÍ VAN SOLO LAS COLUMNAS ---
+  
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -29,13 +29,13 @@ const User = Sequelize.define("user", {
 }, {
 
   defaultScope: { 
-    attributes: { exclude: ['contrasena'] },  // Exclude the password field by default
+    attributes: { exclude: ['contrasena'] }, 
   },
-  hooks: { // Define hooks for password hashing
-    beforeCreate: async (user) => {  // Hook to hash the password before creating a new user
-      if (user.contrasena) { // Check if the password field is present
-        const salt = await bcrypt.genSalt(10); // Generate a salt for hashing
-        user.contrasena = await bcrypt.hash(user.contrasena, salt); // Hash the password using bcrypt and the generated salt
+  hooks: { 
+    beforeCreate: async (user) => {  
+      if (user.contrasena) { 
+        const salt = await bcrypt.genSalt(10); 
+        user.contrasena = await bcrypt.hash(user.contrasena, salt); 
       }
     },
     beforeUpdate: async (user) => { 
