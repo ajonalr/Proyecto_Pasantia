@@ -8,12 +8,12 @@ const User = Sequelize.define("user", {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-  }, // Cerramos bien el ID aquí
+  }, 
   fotografia: {
     type: DataTypes.STRING, 
     allowNull: true,
   },
-  name: {
+  nombre: {
     type: DataTypes.STRING,
     allowNull: false,
   },

@@ -3,8 +3,8 @@ const Sequelize = require("../database/connection");
 
 const Articulo = Sequelize.define("articulo", { 
    
-    codigo: {
-        type: DataTypes.INTEGER, // o es string, dependiendo de cómo quieras manejarlo
+    id: {
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
@@ -22,7 +22,7 @@ const Articulo = Sequelize.define("articulo", {
         defaultValue: 0, 
     },
     precio_unitario: {
-        type: DataTypes.DECIMAL(10, 2), // o DataTypes.FLOAT, dependiendo de tus necesidades
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
     },
 });
