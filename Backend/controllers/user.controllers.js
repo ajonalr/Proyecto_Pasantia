@@ -6,7 +6,7 @@ const createUser = async (req, res) => {
     const user = await User.create(req.body);
     res.status(201).json({
       user,
-      token: jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET || 'llave_secreta', { expiresIn: '2h' })
+      token: jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '2h' })
     });
     
   } catch (error) {
