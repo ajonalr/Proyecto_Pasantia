@@ -6,11 +6,30 @@ const Venta = Sequelize.define('Venta', {
         type: DataTypes.INTEGER,        
         primaryKey: true,
         autoIncrement: true,
+    
     },
-    fecha: {
-        type: DataTypes.DATE,
+
+    cantidad: {
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
+
+    precioUnitario: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+    },
+
+    precioVenta: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+    },
+
+    descuento: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+        defaultValue: 0.00,
+    },
+
     total: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,

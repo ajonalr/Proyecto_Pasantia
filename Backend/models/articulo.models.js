@@ -25,6 +25,8 @@ const Articulo = Sequelize.define("articulo", {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
     },
+
+    // agregar precio de compra
 });
 
 module.exports = Articulo;

@@ -12,6 +12,7 @@ const User = Sequelize.define("user", {
   fotografia: {
     type: DataTypes.STRING, 
     allowNull: true,
+    length: 100000
   },
   nombre: {
     type: DataTypes.STRING,
