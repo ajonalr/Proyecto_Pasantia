@@ -1,9 +1,10 @@
-const User = require("../models/user.models");
+const UserModel = require("../models/user.models");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const createUser = async (req, res) => {
   try {
-    const user = await User.create(req.body);
+    const user = await UserModel.create(req.body);
     res.status(201).json({
       user,
       token: jwt.sign({ id: user.id, email: user.email }, 'misecretJWT', { expiresIn: '2h' })
@@ -16,7 +17,7 @@ const createUser = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await UserModel.findAll();
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -25,7 +26,7 @@ const getAllUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.id);
+    const user = await UserModel.findByPk(req.params.id);
     if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
     res.status(200).json(user);
   } catch (error) {
@@ -35,7 +36,7 @@ const getUserById = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.id);
+    const user = await UserModel.findByPk(req.params.id);
     if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
     await user.update(req.body);
     res.status(200).json(user);
@@ -46,7 +47,7 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.id);
+    const user = await UserModel.findByPk(req.params.id);
     if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
     await user.destroy();
     res.status(200).json({ message: "Usuario eliminado" });
@@ -55,4 +56,36 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getAllUsers, getUserById, updateUser, deleteUser };
+
+const login = async (req, res) => {
+    try {
+        const { email, contrasena } = req.body;
+
+        const usuario =  await UserModel.scope(null).findOne({ where: { email } });
+        if (!usuario) {
+            return res.status(400).json({ mensaje: "Credenciales incorrectas (Email no encontrado)" });
+        }
+     
+        const contraseñaCorrecta = await bcrypt.compare(contrasena, usuario.contrasena);
+        if (!contraseñaCorrecta) {
+            return res.status(400).json({ mensaje: "Credenciales incorrectas (Contraseña mal)" });
+        }
+
+        const token = jwt.sign(
+            { id: usuario.id, email: usuario.email }, 
+            'misecretJWT', 
+            { expiresIn: '1h' } 
+        );
+
+        res.json({
+            mensaje: "Login exitoso",
+            token
+        });
+
+    } catch (error) {
+      console.log(error);
+        res.status(500).json({ mensaje: "Error en el servidor", error });
+    }
+}
+
+module.exports = { createUser, getAllUsers, getUserById, updateUser, deleteUser, login };
