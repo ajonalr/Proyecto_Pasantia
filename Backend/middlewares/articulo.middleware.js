@@ -8,9 +8,6 @@ const stock = req.body.stock !== undefined ? Number(req.body.stock) : undefined;
         });
 
     }
-
     return next();
-
 };
 
-module.exports = { validarStock }; 

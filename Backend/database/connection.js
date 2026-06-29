@@ -9,7 +9,7 @@ require('dotenv').config();
 // console.log('DB_PORT:', process.env.DB_PORT);
 
 const bd = new Sequelize(
-  'proof1',
+  'proof3',
   'root',
   'root',
   {
