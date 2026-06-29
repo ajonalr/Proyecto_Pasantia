@@ -9,12 +9,12 @@ require('dotenv').config();
 // console.log('DB_PORT:', process.env.DB_PORT);
 
 const bd = new Sequelize(
-  'proof3',
-  'root',
-  'root',
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
   {
-    host: 'localhost',
-    port: 33061,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     dialect: 'mysql',
   }
 );
