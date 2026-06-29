@@ -1,5 +1,6 @@
 const venta = require('../models/venta.models');
 const articulo = require('../models/articulo.models');
+const { updateArticulo } = require('./articulo.controllers');
 
 // const crearVenta = async (req, res) => {
 //   try {
@@ -80,6 +81,10 @@ const storeVenta = async (req, res) => {
       articuloId,
       clienteId
     });
+
+    // updated 
+
+    // decrementar el stock de los articulos por la cantidad de ventas
     
     res.status(201).json({ message: 'Venta creada exitosamente', ventaId: ventaStore.id });
   } catch (error) {
