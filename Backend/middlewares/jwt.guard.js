@@ -10,6 +10,7 @@ const authGuard = async (req, res, next) => {
     
     // El header llega como "Bearer TOKEN_AQUÍ", así que separamos el string
     const token = authHeader && authHeader.split(' ')[1];
+    console.log(token);
 
     // Si no enviaron ningún token
     if (!token) {
