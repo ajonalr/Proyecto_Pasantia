@@ -22,7 +22,7 @@ const authGuard = async (req, res, next) => {
         const datosDecodificados = jwt.verify(token, ACCESS_SECRET);
 
         // 3. Buscar al usuario en la base de datos con Sequelize (Usa el defaultScope automáticamente)
-        const usuario = await Usuario.findByPk(datosDecodificados.id);
+        const usuario = await User.findByPk(datosDecodificados.id);
 
         if (!usuario) {
             return res.status(404).json({ mensaje: "Usuario no encontrado en el sistema." });

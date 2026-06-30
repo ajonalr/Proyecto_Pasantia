@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const { storeVenta } = require('../controllers/venta.controllers');
-const { soloGet } = require('../middlewares/validaciones.middleware')
+const authGuard = require('../middlewares/jwt.guard');
 
 
 
 
 
-router.post('/store', soloGet, storeVenta);
+router.post('/store', authGuard, storeVenta);
 
 
 module.exports = router;
