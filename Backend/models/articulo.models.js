@@ -8,6 +8,11 @@ const Articulo = Sequelize.define("articulo", {
         primaryKey: true,
         autoIncrement: true,
     },
+    codigo_barras: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        unique: true,
+    },
     nombre: {
         type: DataTypes.STRING,
         allowNull: false,
