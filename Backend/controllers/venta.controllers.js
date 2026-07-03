@@ -28,6 +28,19 @@ const getVentaByFactura = async (req, res) => {
   }
 };
 
+const getUltimasVentas = async (req, res) => {
+  try {
+    const ultimasVentas = await venta.findAll({
+      order: [['createdAt', 'DESC']],
+      limit: 5
+    });
+    res.status(200).json(ultimasVentas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener las últimas ventas' });
+  }
+};
+
 const storeVenta = async (req, res) => {
   try {
     const { productos } = req.body; 
@@ -118,10 +131,14 @@ const updateVenta = async (req, res) => {
   }
 };
 
-module.exports = {
-  storeVenta, 
+
+
+module.exports = { 
   getVentas, 
   getVentaByFactura,
+  getUltimasVentas,
+  storeVenta,
   deleteVenta,
-  updateVenta
+  updateVenta,
+
 };
