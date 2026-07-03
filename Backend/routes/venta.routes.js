@@ -8,7 +8,7 @@ router.get('/factura/:factura', authGuard, getVentaByFactura);
 router.get('/ultimasventas', authGuard, getUltimasVentas);
 
 router.post('/store', authGuard, storeVenta);
-router.delete('/:id', authGuard, deleteVenta);
+router.delete('/all-products/:factura', authGuard, deleteVenta);
 router.put('/:id', authGuard, updateVenta);
 
 

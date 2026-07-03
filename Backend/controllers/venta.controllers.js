@@ -65,7 +65,7 @@ const storeVenta = async (req, res) => {
     res.status(201).json({ message: 'Venta creada exitosamente', factura: codigoFactura });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al crear la venta' }); 
+    res.status(500).json({ error: 'Error al crear la venta' });  
   }
 };
 
@@ -77,27 +77,23 @@ const buscarVentaOError = async (id) => {
   return ventaExistente;
 };
 
+// TODO: Implementar la función de eliminar venta y restaurar stock
 const deleteVenta = async (req, res) => {
   try {
-    const { id } = req.params;
-    const ventaExistente = await buscarVentaOError(id);
-    const numeroFactura = ventaExistente.factura;
-
-    const articulosEnFactura = await venta.findAll({ 
-      where: { factura: numeroFactura } 
+    const { factura } = req.params;
+    const ventas = await venta.findAll({
+      where: { factura: factura }
     });
-   
-    for (const item of articulosEnFactura) {
-      const articuloToUpdate = await articulo.findByPk(item.articuloId);
-      
+    for (const vent of ventas) {
+      // restauramos el stock del artículo correspondiente
+      const articuloToUpdate = await articulo.findByPk(vent.articuloId);
       if (articuloToUpdate) {
-        articuloToUpdate.stock = articuloToUpdate.stock + item.cantidad;
+        articuloToUpdate.stock = articuloToUpdate.stock + vent.cantidad;
         await articuloToUpdate.save();
       }
+      await vent.destroy(); // eliminamos la venta
     }
-    await venta.destroy({ where: { factura: numeroFactura } });
-    res.status(200).json({ 
-      message: `Venta con factura ${numeroFactura} eliminada y stock restaurado exitosamente`});
+    res.status(200).json({ message: `Venta con factura ${factura} eliminada y stock restaurado exitosamente` });
   } catch (error) {
     console.error(error);
     const status = error.message === 'Venta no encontrada' ? 404 : 500;
@@ -105,6 +101,8 @@ const deleteVenta = async (req, res) => {
   }
 };
 
+
+// TODO: Implementar la función de modificar venta Y VALIDAR SI SE INCREMENTA O DECREMENTA LA CANTIDAD PARA AJUSTAR EL STOCK
 const updateVenta = async (req, res) => {
   try {
     const { id } = req.params;
